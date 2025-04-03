@@ -1,9 +1,8 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 import uvicorn
-from http_client import CMCHttpClient
-from config import settings
-from router import router as cmc_router
+from src.dependencies import setup_cmc_client
+from src.cryptocurrency.router import router as cmc_router
 
 
 @asynccontextmanager
@@ -18,10 +17,7 @@ async def lifecycle_handler(app: FastAPI):
     None
     """
     # Создаем клиент CoinMarketCap HTTP-клиента
-    app.state.cmc_client = CMCHttpClient(
-        base_url=settings.CMC_BASE_URL,
-        api_key=settings.CMC_API_KEY
-    )
+    app.state.cmc_client = setup_cmc_client()
     yield
     # Закрываем клиент CoinMarketCap HTTP-клиента
     await app.state.cmc_client.close()

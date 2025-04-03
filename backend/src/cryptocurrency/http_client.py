@@ -46,9 +46,9 @@ class CMCHttpClient(HttpClient):
     Класс CMCHttpClient наследует от HttpClient и предоставляет методы для работы с API CoinMarketCap.
     """
 
-    async def get_listings(self):
+    async def get_all(self):
         """
-        Метод get_listings делает асинхронный GET запрос к API CoinMarketCap для получения списка криптовалют.
+        Метод get_all делает асинхронный GET запрос к API CoinMarketCap для получения списка криптовалют.
         Возвращает список криптовалют в формате JSON.
 
         Returns:
@@ -58,20 +58,20 @@ class CMCHttpClient(HttpClient):
             result = await response.json()
             return result["data"]
 
-    async def get_currency(self, currency_id: int):
+    async def get_by_id(self, id: int):
         """
         Метод get_currency_info делает асинхронный GET запрос к API CoinMarketCap для получения информации о криптовалюте по ее ID.
         Возвращает информацию о криптовалюте в формате JSON.
 
         Args:
-            currency_id (int): ID криптовалюты.
+            id (int): ID криптовалюты.
 
         Returns:
             dict: Словарь с данными о криптовалюте.
         """
         async with self._session.get(
             url='/v2/cryptocurrency/quotes/latest',
-            params={'id': currency_id}
+            params={'id': id}
         ) as response:
             result = await response.json()
-            return result["data"][str(currency_id)]
+            return result["data"][str(id)]
