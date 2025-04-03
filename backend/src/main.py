@@ -3,6 +3,7 @@ from fastapi import FastAPI
 import uvicorn
 from http_client import CMCHttpClient
 from config import settings
+from router import router as cmc_router
 
 
 @asynccontextmanager
@@ -25,41 +26,23 @@ async def lifecycle_handler(app: FastAPI):
     # Закрываем клиент CoinMarketCap HTTP-клиента
     await app.state.cmc_client.close()
 
-app = FastAPI(
-    lifespan=lifecycle_handler # Добавляем контекстный менеджер жизненного цикла приложения
-)
-
-
-@app.get(
-    "/cryptocurrency",
-    summary="Получить все криптовалюты",
-)
-async def get_cryptocurrencies():
+def get_app() -> FastAPI:
     """
-    Получает все криптовалюты.
+    Создает и возвращает экземпляр приложения FastAPI.
 
     Returns:
-        Список всех криптовалют.
+    FastAPI: Экземпляр приложения FastAPI.
     """
-    return await app.state.cmc_client.get_listings()
+    app = FastAPI(
+        # Добавляем контекстный менеджер жизненного цикла приложения
+        lifespan=lifecycle_handler
+    )
+    # Добавляем роутер криптовалют
+    app.include_router(router=cmc_router)
+    return app
 
-
-@app.get(
-    "/cryptocurrency/{currency_id}",
-    summary="Получить криптовалюту по id",
-)
-async def get_currency(currency_id: int):
-    """
-    Получает криптовалюту по ее id.
-
-    Args:
-        currency_id (int): id криптовалюты.
-
-    Returns:
-        Криптовалюта с указанным id.
-    """
-    return await app.state.cmc_client.get_currency(currency_id)
-
+# Получаем экземпляр приложения FastAPI
+app = get_app()
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
