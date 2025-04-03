@@ -23,9 +23,9 @@ class HttpClient():
         Параметры
         ----------
         base_url : str
-        Базовый URL для HTTP-сессии.
+            Базовый URL для HTTP-сессии.
         api_key : str
-        API-ключ для HTTP-сессии.
+            API-ключ для HTTP-сессии.
         """
         self._session = ClientSession(
             base_url=base_url,

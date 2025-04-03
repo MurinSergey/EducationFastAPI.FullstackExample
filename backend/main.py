@@ -11,10 +11,10 @@ async def lifecycle_handler(app: FastAPI):
     Асинхронный контекстный менеджер для обработки жизненного цикла приложения.
 
     Args:
-    app (FastAPI): Приложение FastAPI.
+        app (FastAPI): Приложение FastAPI.
 
     Yields:
-    None
+        None
     """
     # Создаем клиент CoinMarketCap HTTP-клиента
     app.state.cmc_client = setup_cmc_client()
