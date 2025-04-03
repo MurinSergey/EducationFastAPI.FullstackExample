@@ -1,4 +1,7 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Depends, Request
+
+from http_client import CMCHttpClient
+from dependencies import get_cmc_client
 
 router = APIRouter(prefix='/cryptocurrency',
                    tags=['Информация о криптовалютах'])
@@ -9,15 +12,18 @@ router = APIRouter(prefix='/cryptocurrency',
     summary="Получить все криптовалюты",
 )
 async def get_cryptocurrencies(
-    request: Request
+    client: CMCHttpClient = Depends(get_cmc_client),
 ):
     """
-    Получает все криптовалюты.
+    Получить список всех криптовалют.
+
+    Args:
+        client (CMCHttpClient): HTTP-клиент для работы с API CoinMarketCap.
 
     Returns:
-        Список всех криптовалют.
+        list: Список всех криптовалют.
     """
-    return await request.app.state.cmc_client.get_listings()
+    return await client.get_listings()
 
 
 @router.get(
@@ -26,15 +32,16 @@ async def get_cryptocurrencies(
 )
 async def get_currency(
     currency_id: int,
-    request: Request
+    client: CMCHttpClient = Depends(get_cmc_client),
 ):
     """
-    Получает криптовалюту по ее id.
+    Получить информацию о криптовалюте по ее идентификатору.
 
     Args:
-        currency_id (int): id криптовалюты.
+        currency_id (int): Идентификатор криптовалюты.
+        client (CMCHttpClient): HTTP-клиент для работы с API CoinMarketCap.
 
     Returns:
-        Криптовалюта с указанным id.
+        dict: Информация о криптовалюте.
     """
-    return await request.app.state.cmc_client.get_currency(currency_id)
+    return await client.get_currency(currency_id)
