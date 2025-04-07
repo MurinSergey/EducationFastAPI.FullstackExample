@@ -5,6 +5,7 @@ function CryptocurrencyCard({ currencyData }) {
 
     const formatPrice = currencyData.quote.USD.price.toFixed(2);
     const priceChangePercent = currencyData.quote.USD.percent_change_24h.toFixed(2);
+    const priceChangeColor = priceChangePercent > 0 ? 'text-green-400' : 'text-red-400';
     const priceMarketCap = (currencyData.quote.USD.market_cap / 1_000_000).toFixed(2);
 
     return (
@@ -18,13 +19,17 @@ function CryptocurrencyCard({ currencyData }) {
             }
             style={{ 
                 width: 700,
-                height: 400,
+                height: 340,
                 boxShadow: '0px 0px 5px rgba(0,0,0,0.5)',
                 border: 'none',
             }}
             className='text-3xl'>
             <p>Текущая цена: {formatPrice}$</p>
-            <p>Цена за 24 часа: {priceChangePercent}%</p>
+            <p>Цена за 24 часа: 
+              <span className={priceChangeColor}>
+                 {priceChangePercent}%
+              </span>
+            </p>
             <p>Текущая капитализация: {priceMarketCap}$</p>
         </Card>
       </div>
