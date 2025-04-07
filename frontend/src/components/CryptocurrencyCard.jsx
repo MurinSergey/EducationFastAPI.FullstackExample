@@ -12,11 +12,17 @@ function CryptocurrencyCard({ currencyData }) {
         <Card
             title={
                 <div className="flex items-center gap-3">
-                    <img src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${currencyData.id}.png`} alt="Bitcoin" />
-                    <span>{currencyData.name}</span>
+                    <img src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${currencyData.id}.png`} alt="logo" width="50"/>
+                    <p className='text-3xl'>{currencyData.name}</p>
                 </div>
             }
-            style={{ width: 300 }}>
+            style={{ 
+                width: 700,
+                height: 400,
+                boxShadow: '0px 0px 5px rgba(0,0,0,0.5)',
+                border: 'none',
+            }}
+            className='text-3xl'>
             <p>Текущая цена: {formatPrice}$</p>
             <p>Цена за 24 часа: {priceChangePercent}%</p>
             <p>Текущая капитализация: {priceMarketCap}$</p>
