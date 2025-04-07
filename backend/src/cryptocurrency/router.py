@@ -31,7 +31,7 @@ async def get_cryptocurrencies(
     summary="Получить криптовалюту по id",
 )
 async def get_currency(
-    id: int,
+    currency_id: int,
     client: http_client_protocol = Depends(get_cmc_client),
 ):
     """
@@ -44,4 +44,4 @@ async def get_currency(
     Returns:
         dict: Информация о криптовалюте.
     """
-    return await client.get_by_id(id)
+    return await client.get_by_id(currency_id)

@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from src.dependencies import setup_cmc_client
 from src.cryptocurrency.router import router as cmc_router
@@ -17,7 +18,7 @@ async def lifecycle_handler(app: FastAPI):
         None
     """
     # Создаем клиент CoinMarketCap HTTP-клиента
-    app.state.cmc_client = setup_cmc_client()
+    app.state.cmc_client = await setup_cmc_client()
     yield
     # Закрываем клиент CoinMarketCap HTTP-клиента
     await app.state.cmc_client.close()
@@ -35,6 +36,20 @@ def get_app() -> FastAPI:
     )
     # Добавляем роутер криптовалют
     app.include_router(router=cmc_router)
+
+    origins = [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ]
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
     return app
 
 # Получаем экземпляр приложения FastAPI
