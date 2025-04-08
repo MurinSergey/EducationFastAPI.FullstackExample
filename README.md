@@ -1,5 +1,5 @@
 # Ученый проект
-Проект создан по туториалу Артема Шумейко 
+Проект создан по туториалу:
 https://vkvideo.ru/video-227148184_456239030
 https://github.com/artemonsh/fullstack-fastapi-react
 
